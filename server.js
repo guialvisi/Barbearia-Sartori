@@ -6,7 +6,10 @@ const crypto = require('crypto');
 const path = require('path');
 
 const app = express();
-const db = new Database(path.join(__dirname, 'database.db'));
+const databasePath = process.env.VERCEL
+  ? '/tmp/billcuts-database.db'
+  : path.join(__dirname, 'database.db');
+const db = new Database(databasePath);
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'billcuts';
@@ -497,6 +500,10 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
