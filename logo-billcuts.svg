@@ -1,0 +1,19 @@
+<svg width="620" height="200" viewBox="0 0 620 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="620" height="200" rx="14" fill="#0B0B0C"/>
+  <g transform="translate(28 20)">
+    <circle cx="70" cy="80" r="62" fill="#0B0B0C" stroke="#D9B067" stroke-width="4"/>
+    <circle cx="70" cy="80" r="8" fill="#D9B067"/>
+    <path d="M38 103L69 79L102 103" stroke="#D9B067" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M53 58L39 31M87 58L101 31" stroke="#D9B067" stroke-width="5" stroke-linecap="round"/>
+    <path d="M40 118L58 140M100 118L82 140" stroke="#D9B067" stroke-width="5" stroke-linecap="round"/>
+    <path d="M70 18L70 8M70 152L70 161" stroke="#D9B067" stroke-width="5" stroke-linecap="round"/>
+    <path d="M20 76H118" stroke="#D9B067" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 10"/>
+    <path d="M20 92H118" stroke="#D9B067" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 10"/>
+  </g>
+
+  <g transform="translate(170 0)">
+    <text x="0" y="96" font-family="Arial Black, Arial, sans-serif" font-size="62" font-weight="900" fill="#D9B067" letter-spacing="1">BILL CUTS</text>
+    <text x="4" y="132" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#D9B067" letter-spacing="6">BARBER SHOP</text>
+    <path d="M4 150H366" stroke="#D9B067" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

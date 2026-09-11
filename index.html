@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+
+<!-- Fontes: Anton para títulos de impacto, Archivo para leitura, Space Mono para preços/etiquetas -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="style.css?v=20260910-5">
+<style>
+  .admin-login-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 11, 0.78);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1500;
+  }
+
+  .admin-login-modal.is-open {
+    display: flex;
+  }
+
+  .admin-login-panel {
+    position: relative;
+    width: min(420px, 100%);
+    background: #19191b;
+    border: 1px solid #3a3a3d;
+    padding: 32px 24px 24px;
+    box-shadow: 8px 10px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .admin-login-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: #f5f1e8;
+    font-size: 26px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .admin-login-panel .eyebrow {
+    margin: 0 0 8px;
+    color: var(--steel);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .admin-login-panel h3 {
+    margin: 0 0 10px;
+    font-family: var(--font-display);
+    font-size: clamp(28px, 5vw, 42px);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .admin-login-panel p {
+    color: var(--paper-dim);
+    margin: 0 0 20px;
+  }
+
+  .admin-login-form label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--steel);
+    margin-bottom: 8px;
+  }
+
+  .admin-login-form input {
+    width: 100%;
+    background: #111;
+    border: 1px solid #3a3a3d;
+    color: #fff;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    font-size: 15px;
+  }
+
+  .admin-login-form button {
+    width: 100%;
+  }
+
+  .admin-login-error {
+    min-height: 18px;
+    margin-top: 10px;
+    color: #ff9d7f;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header" id="header">
+  <div class="wrap header-inner">
+    <a href="#home" class="brand" aria-label="Bill Cuts">
+      <img src="logo-billcuts.svg" alt="Bill Cuts" class="brand-logo" />
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="#home" class="nav-link">Início</a>
+      <a href="#sobre" class="nav-link">A Casa</a>
+      <a href="#servicos" class="nav-link">Serviços</a>
+      <a href="#local" class="nav-link">Localização</a>
+      <a href="#agendar" class="nav-cta">Chamar no Zap</a>
+    </nav>
+
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">
+      <span class="menu-btn-bar"></span>
+      <span class="menu-btn-bar"></span>
+      <span class="menu-btn-bar"></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="home">
+    <div class="hero-texture" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <p class="eyebrow">Bragança Paulista · Barbearia</p>
+
+      <h1 class="hero-title">
+        <span class="stencil" data-text="SEU CORTE.">SEU CORTE.</span>
+        <span class="stencil" data-text="SUA RUA.">SUA RUA.</span>
+        <span class="stencil accent-text" data-text="SEU ESTILO.">SEU ESTILO.</span>
+      </h1>
+
+      <p class="hero-sub">Cortes precisos, barba na régua e atendimento rápido. Marque seu horário em menos de 1 minuto pelo WhatsApp.</p>
+
+      <div class="hero-actions">
+        <a href="#agendar" class="btn btn-primary">Agendar horário</a>
+        <a href="#servicos" class="btn btn-ghost">Ver preços</a>
+      </div>
+    </div>
+
+    <div class="sticker sticker-1">CONSTRUINDO UMA HISTORIA</div>
+    <div class="sticker sticker-2">100% LOCAL</div>
+    <div class="sticker sticker-3">O CORTE QUE VOCE PRECISA</div>
+    
+    <div class="hazard-strip" aria-hidden="true"></div>
+  </section>
+
+  <!-- ================= SOBRE ================= -->
+  <section class="sobre" id="sobre">
+    <div class="wrap sobre-inner">
+      <div class="section-head">
+        <p class="eyebrow">A casa</p>
+        <h2 class="section-title">NASCEU NA RUA,<br>CRESCEU NA NAVALHA.</h2>
+      </div>
+      <div class="sobre-text">
+        <p>A BillCuts nasceu em Bragança Paulista com uma ideia simples: barbearia de verdade é aquela que respeita seu tempo e entrega um corte que representa quem você é. Nada de fórmula pronta.</p>
+        <p>Aqui cada cliente senta na cadeira e sai com estilo próprio — do clássico ao navalhado, do social ao mais ousado. Ambiente sem frescura, atendimento direto, resultado que fala por si.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="hazard-strip hazard-strip--label" aria-hidden="true"><span>SERVIÇOS</span></div>
+
+  <!-- ================= SERVIÇOS ================= -->
+  <section class="servicos" id="servicos">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Tabela de preços</p>
+        <h2 class="section-title">O QUE A GENTE FAZ</h2>
+      </div>
+
+      <div class="price-grid">
+
+        <article class="price-tag">
+          <span class="price-tag-hole" aria-hidden="true"></span>
+          <h3>Corte Social</h3>
+          <p class="price-tag-time">40 min</p>
+          <p class="price-tag-value">R$ 20</p>
+        </article>
+
+        <article class="price-tag">
+          <span class="price-tag-hole" aria-hidden="true"></span>
+          <h3>Pézinho</h3>
+          <p class="price-tag-time">30 min</p>
+          <p class="price-tag-value">R$ 15</p>
+        </article>
+
+        <article class="price-tag price-tag--featured">
+          <span class="price-tag-hole" aria-hidden="true"></span>
+          <span class="price-tag-badge">Mais pedido</span>
+          <h3>Degrade</h3>
+          <p class="price-tag-time">1h10</p>
+          <p class="price-tag-value">R$ 20</p>
+        </article>
+
+        <article class="price-tag">
+          <span class="price-tag-hole" aria-hidden="true"></span>
+          <h3>Sobrancelha</h3>
+          <p class="price-tag-time">15 min</p>
+          <p class="price-tag-value">R$ 5</p>
+        </article>
+
+        <article class="price-tag">
+          <span class="price-tag-hole" aria-hidden="true"></span>
+          <h3>Bigode</h3>
+          <p class="price-tag-time">45 min</p>
+          <p class="price-tag-value">R$ 5</p>
+        </article>
+
+        <article class="price-tag">
+          <span class="price-tag-hole" aria-hidden="true"></span>
+          <h3>Barba</h3>
+          <p class="price-tag-time">30 min</p>
+          <p class="price-tag-value">R$ 30</p>
+        </article>
+        
+      </div>
+      <p class="price-note">Valores de referência. Podem variar conforme comprimento e complexidade do serviço.</p>
+    </div>
+  </section>
+
+  <!-- ================= AGENDAMENTO ================= -->
+  <section class="agendar" id="agendar">
+    <div class="wrap agendar-inner">
+      <div class="section-head">
+        <p class="eyebrow">Marque já</p>
+        <h2 class="section-title">BORA<br>AGENDAR?</h2>
+        <p class="agendar-desc">Preenche o formulário e a gente já abre o WhatsApp com sua solicitação prontinha. É só confirmar o envio.</p>
+      </div>
+
+      <form class="form" id="bookingForm" novalidate>
+        <div class="form-row">
+          <div class="field-heading">
+            <label for="nome">Como podemos te chamar?</label>
+            <span class="field-status">Obrigatório</span>
+          </div>
+          <div class="input-shell input-shell--name">
+            <span class="input-mark" aria-hidden="true">A</span>
+            <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" autocomplete="name" minlength="3" required>
+          </div>
+          <small class="field-hint">Usaremos seu nome para identificar o agendamento.</small>
+        </div>
+
+        <div class="form-row">
+          <div class="field-heading">
+            <label for="telefone">Seu WhatsApp</label>
+            <span class="field-status">Obrigatório</span>
+          </div>
+          <div class="input-shell input-shell--phone">
+            <span class="input-mark" aria-hidden="true">+55</span>
+            <input type="tel" id="telefone" name="telefone" placeholder="(11) 9 0000-0000" autocomplete="tel" inputmode="tel" maxlength="15" required>
+          </div>
+          <small class="field-hint">Enviaremos a confirmação por este número.</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-label-line">
+            <label for="servico-1">Serviços</label>
+            <span class="selection-count" id="selectionCount">0 selecionados</span>
+          </div>
+          <div class="service-picker" id="servicePicker" role="group" aria-describedby="servicoHint">
+            <label class="service-option">
+              <input type="checkbox" name="servicos" value="1" data-service-option data-label="Pezinho" data-price="R$ 15" id="servico-1">
+              <span><strong>Pezinho</strong><small>R$ 15</small></span>
+            </label>
+            <label class="service-option">
+              <input type="checkbox" name="servicos" value="2" data-service-option data-label="Corte Social" data-price="R$ 15" id="servico-2">
+              <span><strong>Corte Social</strong><small>R$ 15</small></span>
+            </label>
+            <label class="service-option">
+              <input type="checkbox" name="servicos" value="3" data-service-option data-label="Degrade" data-price="R$ 20" id="servico-3">
+              <span><strong>Degrade</strong><small>R$ 20</small></span>
+            </label>
+            <label class="service-option">
+              <input type="checkbox" name="servicos" value="4" data-service-option data-label="Sobrancelha" data-price="R$ 5" id="servico-4">
+              <span><strong>Sobrancelha</strong><small>R$ 5</small></span>
+            </label>
+            <label class="service-option">
+              <input type="checkbox" name="servicos" value="5" data-service-option data-label="Bigode" data-price="R$ 5" id="servico-5">
+              <span><strong>Bigode</strong><small>R$ 5</small></span>
+            </label>
+            <label class="service-option">
+              <input type="checkbox" name="servicos" value="6" data-service-option data-label="Barba" data-price="R$ 30" id="servico-6">
+              <span><strong>Barba</strong><small>R$ 30</small></span>
+            </label>
+          </div>
+          <small class="field-hint" id="servicoHint">Selecione um ou mais serviços.</small>
+        </div>
+
+        <div class="form-row form-row--split">
+          <div>
+            <label for="data">Data preferida</label>
+            <input type="hidden" id="data" name="data">
+            <div class="choice-picker date-picker" id="datePicker" role="group" aria-label="Datas disponíveis"></div>
+          </div>
+          <div>
+            <label for="hora">Horário preferido</label>
+            <input type="hidden" id="hora" name="hora">
+            <div class="choice-picker time-picker" id="timePicker" role="group" aria-label="Horários disponíveis"></div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="obs">Observações <span class="optional">(opcional)</span></label>
+          <textarea id="obs" name="obs" rows="3" placeholder="Alguma preferência ou detalhe extra?"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Enviar pelo WhatsApp</button>
+        <p class="form-note" id="formNote">Você será direcionado ao WhatsApp da AlvisiCuts com sua solicitação preenchida. Confirmação sujeita à disponibilidade.</p>
+      </form>
+    </div>
+  </section>
+
+  <div class="hazard-strip hazard-strip--label" aria-hidden="true"><span>LOCALIZAÇÃO</span></div>
+
+  <!-- ================= LOCALIZAÇÃO ================= -->
+  <section class="local" id="local">
+    <div class="wrap local-inner">
+      <div>
+        <div class="section-head">
+          <p class="eyebrow">Onde estamos</p>
+        <h2 class="section-title">ENCONTRE A<br>BILL CUTS</h2>
+        </div>
+
+        <ul class="info-list">
+          <li>
+            <strong>Endereço</strong>
+            <span>R. José Del Roio, 105 - São Lourenço, Bragança Paulista - SP, 12908-844</span>
+          </li>
+          <li>
+            <strong>WhatsApp</strong>
+            <span><a href="https://wa.me/5511933679420" target="_blank" rel="noopener noreferrer">(11) 93367-9420</a></span>
+          </li>
+          <li>
+            <strong>Instagram</strong>
+            <span><a href="https://www.instagram.com/bill.cuts_/" target="_blank" rel="noopener noreferrer">@bill.cuts_</a></span>
+          </li>
+        </ul>
+
+        <table class="hours-table">
+          <tbody>
+            <tr><td>Segunda a Sexta</td><td>09h — 20h</td></tr>
+            <tr><td>Sábado</td><td>08h — 18h</td></tr>
+            <tr><td>Domingo</td><td>Fechado</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="map-frame">
+        <iframe
+          src="https://www.google.com/maps?q=R.%20Jos%C3%A9%20Del%20Roio%2C%20105%20-%20S%C3%A3o%20Louren%C3%A7o%2C%20Bragan%C3%A7a%20Paulista%20-%20SP%2C%2012908-844&output=embed"
+          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Mapa de R. José Del Roio, 105 - São Lourenço, Bragança Paulista - SP">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <a href="#home" class="logo logo--footer">BILL <span>CUTS</span></a>
+    <nav class="footer-nav">
+      <a href="#sobre">A Casa</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#agendar">Agendar</a>
+      <a href="#local">Localização</a>
+    </nav>
+    <p class="footer-copy">© <span id="year"></span> Bill Cuts. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<!-- Botão flutuante de WhatsApp -->
+<a href="https://wa.me/5511933679420" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Chamar no WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.003a7.94 7.94 0 0 0 5.55-13.58ZM12.05 18.4h-.003a6.58 6.58 0 0 1-3.36-.92l-.24-.14-2.5.66.67-2.44-.16-.25a6.6 6.6 0 1 1 12.24-3.5 6.56 6.56 0 0 1-6.62 6.59Zm3.62-4.93c-.2-.1-1.17-.58-1.35-.64s-.31-.1-.44.1-.5.64-.62.77-.23.15-.43.05a5.4 5.4 0 0 1-1.59-.98 5.96 5.96 0 0 1-1.1-1.37c-.12-.2 0-.3.09-.4s.2-.23.29-.35a1.3 1.3 0 0 0 .2-.33.37.37 0 0 0 0-.35c-.05-.1-.44-1.06-.6-1.45s-.32-.33-.44-.33h-.38a.72.72 0 0 0-.53.25 2.2 2.2 0 0 0-.68 1.63 3.8 3.8 0 0 0 .8 2.03 8.7 8.7 0 0 0 3.34 2.95c.47.2.83.32 1.12.41a2.7 2.7 0 0 0 1.24.08 2.03 2.03 0 0 0 1.33-.94 1.65 1.65 0 0 0 .12-.94c-.05-.09-.18-.14-.37-.24Z"/></svg>
+</a>
+
+<script src="script.js?v=20260910-5"></script>
+</body>
+</html>

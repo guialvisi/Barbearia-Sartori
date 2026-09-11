@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Profissional | Bill Cuts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: #111; }
+    .admin-shell {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 120px 24px 80px;
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      color: #f5f1e8;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 999px;
+    }
+    .user-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2ecc71;
+      display: inline-block;
+      box-shadow: 0 0 12px rgba(46, 204, 113, 0.8);
+    }
+    .logout-btn {
+      margin-left: 0;
+    }
+    .admin-header-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .admin-header-kicker {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--steel);
+    }
+    .admin-header-greeting {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(20px, 2vw, 28px);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #f5c26b;
+    }
+    .admin-header h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 54px);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: #f3efe6;
+      color: #111;
+      border-radius: 2px;
+      padding: 20px;
+      box-shadow: 5px 6px 0 rgba(0,0,0,.35);
+      transform: rotate(-1deg);
+    }
+    .stat-card:nth-child(even) { transform: rotate(1deg); }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .calendar-card,
+    .report-card,
+    .agenda-card {
+      background: #1a1a1c;
+      border: 1px solid #3a3a3d;
+      border-radius: 2px;
+      padding: 20px;
+    }
+    .calendar-header,
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .calendar-header h2,
+    .report-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 3vw, 34px);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .slot {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid #3a3a3d;
+      border-left: 4px solid var(--accent);
+      padding: 12px;
+      min-height: 92px;
+    }
+    .slot.status-confirmado { border-left-color: #2ecc71; }
+    .slot.status-cancelado { border-left-color: #ff6b3d; }
+    .slot.status-pendente { border-left-color: #ffd400; }
+    .slot-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--hazard);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .slot strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .slot small {
+      color: #d9d9d9;
+    }
+    .report-list {
+      display: grid;
+      gap: 12px;
+    }
+    .report-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #3a3a3d;
+      padding-bottom: 8px;
+    }
+    .report-item:last-child { border-bottom: none; }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .toolbar input,
+    .toolbar select {
+      background: #111;
+      border: 1px solid #3a3a3d;
+      color: #fff;
+      padding: 10px 12px;
+      min-width: 160px;
+    }
+    .report-value {
+      font-family: var(--font-display);
+      font-size: 28px;
+      line-height: 1;
+      color: #f2eee3;
+    }
+    .report-kicker {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--steel);
+    }
+    .date-filter {
+      border: 1px solid #3a3a3d;
+      background: #111;
+      color: #fff;
+      padding: 10px 12px;
+      font-family: var(--font-body);
+    }
+    .stat-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 4vw, 42px);
+      line-height: 1;
+    }
+    .admin-panel {
+      background: #1a1a1c;
+      border: 1px solid #3a3a3d;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid #3a3a3d;
+      vertical-align: top;
+    }
+    th {
+      background: rgba(255, 71, 19, 0.08);
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    td {
+      color: #d9d9d9;
+      font-size: 14px;
+    }
+    .status-pill {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .status-pendente { background: rgba(255,212,0,.18); color: #ffd400; }
+    .status-confirmado { background: rgba(37,211,102,.12); color: #80eb9d; }
+    .status-cancelado { background: rgba(255,71,19,.12); color: #ff9d84; }
+    .status-realizado { background: rgba(255,255,255,.08); color: #e7e7e7; }
+    .admin-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .mini-btn {
+      background: transparent;
+      border: 1px solid #555;
+      color: #fff;
+      padding: 8px 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .mini-btn.confirmar { border-color: #2ecc71; color: #7ae6a7; }
+    .mini-btn.cancelar { border-color: #ff6b3d; color: #ff9d7f; }
+    .empty-state {
+      padding: 28px;
+      text-align: center;
+      color: #d6d6d6;
+    }
+    @media (max-width: 640px) {
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" id="header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="brand" aria-label="Bill Cuts">
+        <img src="logo-billcuts.svg" alt="Bill Cuts" class="brand-logo" />
+      </a>
+      <nav class="nav" id="nav">
+        <a href="index.html#home" class="nav-link">Início</a>
+        <a href="index.html#servicos" class="nav-link">Serviços</a>
+        <a href="index.html#agendar" class="nav-cta">Chamar no Zap</a>
+      </nav>
+      <button class="menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">
+        <span class="menu-btn-bar"></span>
+        <span class="menu-btn-bar"></span>
+        <span class="menu-btn-bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-shell">
+    <div class="admin-header">
+      <div class="admin-header-copy">
+        <p class="admin-header-kicker">Sistema do proprietário</p>
+        <p class="admin-header-greeting">Bom trabalho, Bill</p>
+        <h1>João Victor de Oliveira Amancio</h1>
+      </div>
+
+      <div class="admin-header-actions">
+        <div class="user-pill">Bill • Proprietário</div>
+        <a href="index.html#agendar" class="btn btn-primary">Novo agendamento</a>
+        <button type="button" class="btn btn-danger logout-btn" id="clearAppointmentsBtn">Zerar agenda</button>
+        <button type="button" class="btn btn-ghost logout-btn" id="logoutBtn">Sair</button>
+      </div>
+    </div>
+
+    <div style="margin:0 0 24px; padding:18px 20px; border:1px solid var(--steel-line); background: linear-gradient(135deg, rgba(255, 113, 59, 0.08), rgba(255,255,255,0.02)); color: var(--paper-dim); font-size:15px; line-height:1.6; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);">
+      Gestão premium do Bill Cuts: acompanhe agendamentos, confirme horários e mantenha o atendimento do dia sempre impecável.
+    </div>
+
+    <div class="admin-stats">
+      <div class="stat-card"><span class="stat-label">Pendentes</span><div class="stat-value" id="statPendentes">0</div></div>
+      <div class="stat-card"><span class="stat-label">Confirmados</span><div class="stat-value" id="statConfirmados">0</div></div>
+      <div class="stat-card"><span class="stat-label">Cancelados</span><div class="stat-value" id="statCancelados">0</div></div>
+      <div class="stat-card"><span class="stat-label">Faturamento</span><div class="stat-value" id="statFaturamento">R$ 0</div></div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="calendar-card">
+        <div class="calendar-header">
+          <h2>Agenda do dia</h2>
+          <input class="date-filter" type="date" id="dateFilter" />
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-header">
+          <h2>Resumo</h2>
+        </div>
+        <div class="report-list">
+          <div class="report-item">
+            <div>
+              <div class="report-kicker">Total</div>
+              <div class="report-value" id="statTotal">0</div>
+            </div>
+            <div class="status-pill status-pendente">Agendados</div>
+          </div>
+          <div class="report-item">
+            <div>
+              <div class="report-kicker">Falta</div>
+              <div class="report-value" id="statFaltas">0</div>
+            </div>
+            <div class="status-pill status-cancelado">Cancelados</div>
+          </div>
+          <div class="report-item">
+            <div>
+              <div class="report-kicker">Receita</div>
+              <div class="report-value" id="statReceita">R$ 0</div>
+            </div>
+            <div class="status-pill status-confirmado">Confirmados</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="admin-panel agenda-card">
+      <div class="toolbar">
+        <input id="searchInput" type="text" placeholder="Buscar cliente ou telefone" />
+        <select id="statusFilter">
+          <option value="">Todos os status</option>
+          <option value="pendente">Pendente</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Serviço</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="agendaBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty-state" hidden>Nenhum agendamento cadastrado ainda.</div>
+    </section>
+  </main>
+
+  <script>
+    const dateFilter = document.getElementById('dateFilter');
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value || 0));
+    }
+
+    function formatarData(dataISO) {
+      if (!dataISO) return '-';
+      const data = new Date(dataISO + 'T00:00:00');
+      return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(data);
+    }
+
+    function renderCalendar(agendamentos) {
+      const targetDate = dateFilter.value || new Date().toISOString().split('T')[0];
+      const list = agendamentos.filter((item) => item.data === targetDate).sort((a, b) => (a.hora > b.hora ? 1 : -1));
+      const grid = document.getElementById('calendarGrid');
+
+      if (!list.length) {
+        grid.innerHTML = '<div class="slot"><strong>Nenhum agendamento</strong><small>Para esta data ainda não há cliente marcado.</small></div>';
+        return;
+      }
+
+      grid.innerHTML = list.map((item) => `
+        <div class="slot status-${item.status}">
+          <div class="slot-time">${item.hora}</div>
+          <strong>${item.cliente_nome}</strong>
+          <small>${item.servico_nome}<br>${item.status}</small>
+        </div>
+      `).join('');
+    }
+
+    async function carregarDados() {
+      try {
+        const sessionRes = await fetch('/api/session');
+        const sessionData = await sessionRes.json();
+
+        if (!sessionData.authenticated) {
+          window.location.href = '/login.html';
+          return;
+        }
+
+        const search = document.getElementById('searchInput')?.value || '';
+        const statusFilter = document.getElementById('statusFilter')?.value || '';
+
+        const [relatorioRes, agendamentosRes] = await Promise.all([
+          fetch('/api/relatorio'),
+          fetch(`/api/agendamentos?search=${encodeURIComponent(search)}&status=${encodeURIComponent(statusFilter)}`)
+        ]);
+
+        const relatorio = await relatorioRes.json();
+        const agendamentos = await agendamentosRes.json();
+
+        document.getElementById('statPendentes').textContent = relatorio.pendentes || 0;
+        document.getElementById('statConfirmados').textContent = relatorio.confirmados || 0;
+        document.getElementById('statCancelados').textContent = relatorio.cancelados || 0;
+        document.getElementById('statFaturamento').textContent = formatCurrency(relatorio.faturamento || 0);
+        document.getElementById('statTotal').textContent = relatorio.total || 0;
+        document.getElementById('statFaltas').textContent = relatorio.cancelados || 0;
+        document.getElementById('statReceita').textContent = formatCurrency(relatorio.faturamento || 0);
+
+        const tbody = document.getElementById('agendaBody');
+        const emptyState = document.getElementById('emptyState');
+
+        if (!agendamentos.length) {
+          tbody.innerHTML = '';
+          emptyState.hidden = false;
+          renderCalendar([]);
+          return;
+        }
+
+        emptyState.hidden = true;
+        tbody.innerHTML = agendamentos.map((item) => `
+          <tr>
+            <td>
+              <strong>${item.cliente_nome}</strong><br>
+              <small>${item.cliente_telefone || 'Sem telefone'}</small>
+            </td>
+            <td>${item.servico_nome}</td>
+            <td>${formatarData(item.data)}</td>
+            <td>${item.hora}</td>
+            <td><span class="status-pill status-${item.status}">${item.status}</span></td>
+            <td>
+              <div class="admin-actions">
+                <button class="mini-btn confirmar" data-id="${item.id}" data-status="confirmado">Confirmar</button>
+                <button class="mini-btn cancelar" data-id="${item.id}" data-status="cancelado">Cancelar</button>
+                <button class="mini-btn" data-edit="${item.id}">Editar</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+
+        document.querySelectorAll('[data-status]').forEach((button) => {
+          button.addEventListener('click', async () => {
+            const { id, status } = button.dataset;
+            await fetch(`/api/agendamentos/${id}/status`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ status, motivo: status === 'cancelado' ? 'Cancelado pelo admin' : null })
+            });
+            carregarDados();
+          });
+        });
+
+        document.querySelectorAll('[data-edit]').forEach((button) => {
+          button.addEventListener('click', () => {
+            const id = Number(button.dataset.edit);
+            const item = agendamentos.find((entry) => entry.id === id);
+            if (!item) return;
+
+            const novoNome = prompt('Nome do cliente:', item.cliente_nome || '');
+            if (novoNome === null) return;
+
+            const novoTelefone = prompt('Telefone do cliente:', item.cliente_telefone || '');
+            if (novoTelefone === null) return;
+
+            const novoData = prompt('Nova data (AAAA-MM-DD):', item.data || '');
+            if (novoData === null) return;
+
+            const novaHora = prompt('Novo horário (HH:MM):', item.hora || '');
+            if (novaHora === null) return;
+
+            const novoStatus = prompt('Status (pendente/confirmado/cancelado):', item.status || 'pendente');
+            if (novoStatus === null) return;
+
+            fetch(`/api/agendamentos/${id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                nome: novoNome,
+                telefone: novoTelefone,
+                servico: item.servico_id,
+                data: novoData,
+                hora: novaHora,
+                observacoes: item.observacoes || '',
+                status: novoStatus,
+                motivo: novoStatus === 'cancelado' ? 'Editado pelo admin' : null
+              })
+            }).then(() => carregarDados());
+          });
+        });
+
+        renderCalendar(agendamentos);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date().toISOString().split('T')[0];
+      dateFilter.value = today;
+      dateFilter.addEventListener('change', carregarDados);
+
+      const searchInput = document.getElementById('searchInput');
+      const statusFilter = document.getElementById('statusFilter');
+      searchInput.addEventListener('input', carregarDados);
+      statusFilter.addEventListener('change', carregarDados);
+
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          await fetch('/api/logout', { method: 'POST' });
+          window.location.href = '/login.html';
+        });
+      }
+
+      const clearAppointmentsBtn = document.getElementById('clearAppointmentsBtn');
+      if (clearAppointmentsBtn) {
+        clearAppointmentsBtn.addEventListener('click', async () => {
+          const confirmacao = prompt('Esta ação apagará todos os agendamentos. Digite ZERAR para confirmar:');
+          if (confirmacao !== 'ZERAR') return;
+
+          const response = await fetch('/api/agendamentos', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ confirmacao })
+          });
+          const result = await response.json().catch(() => ({}));
+
+          if (!response.ok) {
+            alert(result.error || 'Não foi possível zerar a agenda.');
+            return;
+          }
+
+          alert(`${result.total || 0} agendamento(s) removido(s).`);
+          carregarDados();
+        });
+      }
+
+      carregarDados();
+    });
+
+    const menuBtn = document.getElementById('menuBtn');
+    const nav = document.getElementById('nav');
+    if (menuBtn && nav) {
+      menuBtn.addEventListener('click', () => {
+        const isOpen = nav.classList.toggle('is-open');
+        menuBtn.classList.toggle('is-open', isOpen);
+        menuBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+  </script>
+</body>
+</html>
