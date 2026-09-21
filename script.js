@@ -4,6 +4,10 @@
 // ==========================================================================
 const WHATSAPP_NUMBER = '5511933679420';
 const STORAGE_KEY = 'billcuts_agendamentos';
+const BARBEIROS = {
+  1: 'Barbeiro 1',
+  2: 'Barbeiro 2',
+};
 
 function lerAgendamentos() {
   try {
@@ -29,7 +33,8 @@ async function salvarAgendamentoNoBanco(dados) {
       data: dados.data,
       hora: dados.hora,
       obs: dados.obs,
-    })
+      barbeiroId: dados.barbeiroId,
+    }),
   });
 
   const result = await response.json().catch(() => ({}));
@@ -135,6 +140,10 @@ function getServicosSelecionados() {
   return serviceOptions.filter((option) => option.checked);
 }
 
+function getBarbeiroSelecionado() {
+  return document.querySelector('input[name="barbeiro"]:checked');
+}
+
 function atualizarContagemServicos() {
   if (!selectionCount) return;
   const total = getServicosSelecionados().length;
@@ -195,6 +204,8 @@ async function atualizarHorarioDisponivel() {
   if (!dataInput || !horaInput || !timePicker) return;
 
   const dataSelecionada = dataInput.value;
+  const barbeiroSelecionado = getBarbeiroSelecionado();
+  const barbeiroId = Number(barbeiroSelecionado?.value || 1);
   const expediente = EXPEDIENTE[getDayOfWeek(dataSelecionada)];
   const duracao = getDuracaoSelecionada();
   const valorAtual = horaInput.value;
@@ -218,7 +229,7 @@ async function atualizarHorarioDisponivel() {
 
   let ocupados = [];
   try {
-    const response = await fetch(`/api/disponibilidade?data=${encodeURIComponent(dataSelecionada)}`);
+    const response = await fetch(`/api/disponibilidade?data=${encodeURIComponent(dataSelecionada)}&barbeiroId=${barbeiroId}`);
     const disponibilidade = await response.json();
     if (requestId !== disponibilidadeRequestId) return;
     ocupados = disponibilidade.ocupados || [];
@@ -285,19 +296,17 @@ function isHorarioValido(dateString, timeString, durationMinutes = 0) {
   return { ok: true };
 }
 
-function montarMensagemWhatsApp(dados) {
-  const texto = [
-    'Olá! Quero agendar um horário no Bill Cuts.',
-    '',
-    `*Nome:* ${dados.nome}`,
-    `*Telefone:* ${dados.telefone}`,
-    `*Serviço:* ${dados.servico}`,
-    `*Data:* ${dados.data}`,
-    `*Horário:* ${dados.hora}`,
-    dados.obs ? `*Observações:* ${dados.obs}` : '',
-  ].filter(Boolean).join('%0A');
-
-  return encodeURIComponent(texto);
+function montarMensagemPainel(dados) {
+  return [
+    'Novo agendamento na BARBEARIA SARTORI',
+    `Nome: ${dados.nome}`,
+    `Telefone: ${dados.telefone}`,
+    `Barbeiro: ${dados.barbeiro}`,
+    `Serviço: ${dados.servico}`,
+    `Data: ${dados.data}`,
+    `Horário: ${dados.hora}`,
+    dados.obs ? `Observações: ${dados.obs}` : '',
+  ].filter(Boolean).join('\n');
 }
 
 if (form && formNote) {
@@ -318,6 +327,12 @@ if (form && formNote) {
     });
   });
 
+  document.querySelectorAll('input[name="barbeiro"]').forEach((option) => {
+    option.addEventListener('change', () => {
+      atualizarHorarioDisponivel();
+    });
+  });
+
   atualizarContagemServicos();
   preencherDatasDisponiveis();
   atualizarHorarioDisponivel();
@@ -332,6 +347,9 @@ if (form && formNote) {
       return;
     }
 
+    const barbeiroSelecionado = getBarbeiroSelecionado();
+    const barbeiroId = Number(barbeiroSelecionado?.value || 1);
+
     const dados = {
       nome: form.nome.value.trim(),
       telefone: form.telefone.value.trim(),
@@ -341,6 +359,8 @@ if (form && formNote) {
       data: form.data.value,
       hora: form.hora.value,
       obs: form.obs.value.trim(),
+      barbeiroId,
+      barbeiro: BARBEIROS[barbeiroId] || 'Barbeiro 1',
     };
 
     if (!dados.servicoIds.length) {
@@ -373,18 +393,19 @@ if (form && formNote) {
       return;
     }
 
-    const mensagem = montarMensagemWhatsApp({
+    const mensagem = montarMensagemPainel({
       nome: dados.nome,
       telefone: dados.telefone,
+      barbeiro: dados.barbeiro,
       servico: dados.servico,
       data: formatarDataBR(dados.data),
       hora: dados.hora,
       obs: dados.obs,
     });
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${mensagem}`;
-    window.open(url, '_blank');
 
-    formNote.textContent = `Prontinho! Agendamento #${agendamentoSalvo.id} salvo e WhatsApp aberto.`;
+    console.log(mensagem);
+
+    formNote.textContent = `Prontinho! Agendamento #${agendamentoSalvo.id} enviado para o painel administrativo.`;
     formNote.classList.remove('is-error');
     form.reset();
     atualizarContagemServicos();

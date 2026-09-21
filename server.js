@@ -93,6 +93,11 @@ function validarExpediente(data, hora, duracaoMinutos = 0) {
 }
 
 const createTables = () => {
+  const agendamentoInfo = db.prepare('PRAGMA table_info(agendamentos)').all();
+  if (!agendamentoInfo.some((coluna) => coluna.name === 'barbeiro_id')) {
+    db.exec('ALTER TABLE agendamentos ADD COLUMN barbeiro_id INTEGER NOT NULL DEFAULT 1;');
+  }
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS clientes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -115,6 +120,7 @@ const createTables = () => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       cliente_id INTEGER NOT NULL,
       servico_id INTEGER NOT NULL,
+      barbeiro_id INTEGER NOT NULL DEFAULT 1,
       data TEXT NOT NULL,
       hora TEXT NOT NULL,
       observacoes TEXT,
@@ -239,6 +245,7 @@ app.get('/api/agendamentos', requireAdmin, (req, res) => {
 
   let sql = `
     SELECT a.*, c.nome AS cliente_nome, c.telefone AS cliente_telefone,
+      CASE a.barbeiro_id WHEN 1 THEN 'Barbeiro 1' WHEN 2 THEN 'Barbeiro 2' ELSE 'Barbeiro 1' END AS barbeiro_nome,
       COALESCE((
         SELECT GROUP_CONCAT(servicos.nome, ', ')
         FROM agendamento_servicos
@@ -278,6 +285,7 @@ app.get('/api/disponibilidade', (req, res) => {
   const { data } = req.query;
   if (!data) return res.status(400).json({ error: 'Data obrigatória.' });
 
+  const barbeiroId = Number(req.query.barbeiroId || 1);
   const agendamentos = db.prepare(`
     SELECT a.hora,
       COALESCE(SUM(servicos.duracao_minutos), s.duracao_minutos) AS duracao_minutos
@@ -285,10 +293,10 @@ app.get('/api/disponibilidade', (req, res) => {
     JOIN servicos s ON s.id = a.servico_id
     LEFT JOIN agendamento_servicos vinculos ON vinculos.agendamento_id = a.id
     LEFT JOIN servicos ON servicos.id = vinculos.servico_id
-    WHERE a.data = ? AND a.status != 'cancelado'
+    WHERE a.data = ? AND a.barbeiro_id = ? AND a.status != 'cancelado'
     GROUP BY a.id
     ORDER BY a.hora
-  `).all(data);
+  `).all(data, barbeiroId);
 
   res.json({
     ocupados: agendamentos.map((item) => ({
@@ -299,13 +307,18 @@ app.get('/api/disponibilidade', (req, res) => {
 });
 
 app.post('/api/agendamentos', (req, res) => {
-  const { nome, telefone, data, hora, obs } = req.body || {};
+  const { nome, telefone, data, hora, obs, barbeiroId } = req.body || {};
   const servicoIds = Array.isArray(req.body?.servicos)
     ? req.body.servicos.map(Number).filter(Boolean)
     : [Number(req.body?.servico)].filter(Boolean);
+  const barbeiroEscolhido = Number(barbeiroId || 1);
 
   if (!nome || !telefone || !servicoIds.length || !data || !hora) {
     return res.status(400).json({ error: 'Dados obrigatórios faltando.' });
+  }
+
+  if (!Number.isInteger(barbeiroEscolhido) || ![1, 2].includes(barbeiroEscolhido)) {
+    return res.status(400).json({ error: 'Barbeiro inválido.' });
   }
 
   const servicoItems = servicoIds.map((id) => db.prepare('SELECT * FROM servicos WHERE id = ? AND ativo = 1').get(id));
@@ -337,9 +350,9 @@ app.post('/api/agendamentos', (req, res) => {
     JOIN servicos s ON s.id = a.servico_id
     LEFT JOIN agendamento_servicos vinculos ON vinculos.agendamento_id = a.id
     LEFT JOIN servicos ON servicos.id = vinculos.servico_id
-    WHERE a.data = ? AND a.status != 'cancelado'
+    WHERE a.data = ? AND a.barbeiro_id = ? AND a.status != 'cancelado'
     GROUP BY a.id
-  `).all(data);
+  `).all(data, barbeiroEscolhido);
 
   const horarioOcupado = horariosExistentes.some((item) => {
     const inicio = timeToMinutes(item.hora);
@@ -358,11 +371,11 @@ app.post('/api/agendamentos', (req, res) => {
     : db.prepare('INSERT INTO clientes (nome, telefone, whatsapp) VALUES (?, ?, ?)').run(nome, telefone, telefone).lastInsertRowid;
 
   const insert = db.prepare(`
-    INSERT INTO agendamentos (cliente_id, servico_id, data, hora, observacoes, status, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, 'pendente', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    INSERT INTO agendamentos (cliente_id, servico_id, barbeiro_id, data, hora, observacoes, status, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, 'pendente', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
   `);
 
-  const result = insert.run(clienteId, servicoItem.id, data, hora, obs || '');
+  const result = insert.run(clienteId, servicoItem.id, barbeiroEscolhido, data, hora, obs || '');
 
   const vincularServicos = db.prepare('INSERT INTO agendamento_servicos (agendamento_id, servico_id) VALUES (?, ?)');
   const salvarServicos = db.transaction(() => {
@@ -395,7 +408,7 @@ app.delete('/api/agendamentos', requireAdmin, (req, res) => {
 
 app.patch('/api/agendamentos/:id', requireAdmin, (req, res) => {
   const { id } = req.params;
-  const { nome, telefone, servico, data, hora, observacoes, status, motivo } = req.body || {};
+  const { nome, telefone, servico, data, hora, observacoes, status, motivo, barbeiroId } = req.body || {};
 
   const agendamento = db.prepare('SELECT * FROM agendamentos WHERE id = ?').get(Number(id));
   if (!agendamento) {
@@ -403,6 +416,7 @@ app.patch('/api/agendamentos/:id', requireAdmin, (req, res) => {
   }
 
   const servicoId = Number(servico || agendamento.servico_id);
+  const barbeiroEscolhido = Number(barbeiroId || agendamento.barbeiro_id || 1);
   const servicoItem = db.prepare('SELECT * FROM servicos WHERE id = ?').get(servicoId);
   if (!servicoItem) {
     return res.status(400).json({ error: 'Serviço inválido.' });
@@ -417,8 +431,8 @@ app.patch('/api/agendamentos/:id', requireAdmin, (req, res) => {
 
   const conflito = db.prepare(`
     SELECT id FROM agendamentos
-    WHERE data = ? AND hora = ? AND status != 'cancelado' AND id != ?
-  `).get(novaData, novaHora, Number(id));
+    WHERE data = ? AND hora = ? AND barbeiro_id = ? AND status != 'cancelado' AND id != ?
+  `).get(novaData, novaHora, barbeiroEscolhido, Number(id));
 
   if (conflito) {
     return res.status(409).json({ error: 'Este horário já está ocupado.' });
@@ -436,9 +450,9 @@ app.patch('/api/agendamentos/:id', requireAdmin, (req, res) => {
 
   db.prepare(`
     UPDATE agendamentos
-    SET servico_id = ?, data = ?, hora = ?, observacoes = ?, status = ?, motivo_cancelamento = ?, updated_at = CURRENT_TIMESTAMP
+    SET servico_id = ?, barbeiro_id = ?, data = ?, hora = ?, observacoes = ?, status = ?, motivo_cancelamento = ?, updated_at = CURRENT_TIMESTAMP
     WHERE id = ?
-  `).run(servicoId, novaData, novaHora, observacoes || '', proximoStatus, proximoStatus === 'cancelado' ? (motivo || 'Sem motivo informado') : null, Number(id));
+  `).run(servicoId, barbeiroEscolhido, novaData, novaHora, observacoes || '', proximoStatus, proximoStatus === 'cancelado' ? (motivo || 'Sem motivo informado') : null, Number(id));
 
   db.prepare(`
     INSERT INTO historico_agendamentos (agendamento_id, status_anterior, status_novo, motivo, created_at)

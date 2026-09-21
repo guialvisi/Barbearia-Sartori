@@ -102,8 +102,8 @@
 <!-- ================= HEADER ================= -->
 <header class="site-header" id="header">
   <div class="wrap header-inner">
-    <a href="#home" class="brand" aria-label="Bill Cuts">
-      <img src="logo-billcuts.svg" alt="Bill Cuts" class="brand-logo" />
+    <a href="#home" class="brand" aria-label="BARBEARIA SARTORI">
+      <img src="logo-billcuts.svg" alt="BARBEARIA SARTORI" class="brand-logo" />
     </a>
 
     <nav class="nav" id="nav">
@@ -128,7 +128,7 @@
   <section class="hero" id="home">
     <div class="hero-texture" aria-hidden="true"></div>
     <div class="wrap hero-inner">
-      <p class="eyebrow">Bragança Paulista · Barbearia</p>
+      <p class="eyebrow">Bragança Paulista · BARBEARIA SARTORI</p>
 
       <h1 class="hero-title">
         <span class="stencil" data-text="SEU CORTE.">SEU CORTE.</span>
@@ -136,7 +136,7 @@
         <span class="stencil accent-text" data-text="SEU ESTILO.">SEU ESTILO.</span>
       </h1>
 
-      <p class="hero-sub">Cortes precisos, barba na régua e atendimento rápido. Marque seu horário em menos de 1 minuto pelo WhatsApp.</p>
+      <p class="hero-sub">Cortes precisos, barba na régua e atendimento rápido. Marque seu horário em menos de 1 minuto e envie sua solicitação para o painel administrativo.</p>
 
       <div class="hero-actions">
         <a href="#agendar" class="btn btn-primary">Agendar horário</a>
@@ -159,7 +159,7 @@
         <h2 class="section-title">NASCEU NA RUA,<br>CRESCEU NA NAVALHA.</h2>
       </div>
       <div class="sobre-text">
-        <p>A BillCuts nasceu em Bragança Paulista com uma ideia simples: barbearia de verdade é aquela que respeita seu tempo e entrega um corte que representa quem você é. Nada de fórmula pronta.</p>
+        <p>A BARBEARIA SARTORI nasceu em Bragança Paulista com uma ideia simples: barbearia de verdade é aquela que respeita seu tempo e entrega um corte que representa quem você é. Nada de fórmula pronta.</p>
         <p>Aqui cada cliente senta na cadeira e sai com estilo próprio — do clássico ao navalhado, do social ao mais ousado. Ambiente sem frescura, atendimento direto, resultado que fala por si.</p>
       </div>
     </div>
@@ -231,7 +231,7 @@
       <div class="section-head">
         <p class="eyebrow">Marque já</p>
         <h2 class="section-title">BORA<br>AGENDAR?</h2>
-        <p class="agendar-desc">Preenche o formulário e a gente já abre o WhatsApp com sua solicitação prontinha. É só confirmar o envio.</p>
+        <p class="agendar-desc">Preencha o formulário e sua solicitação será enviada diretamente para o painel administrativo da BARBEARIA SARTORI.</p>
       </div>
 
       <form class="form" id="bookingForm" novalidate>
@@ -257,6 +257,24 @@
             <input type="tel" id="telefone" name="telefone" placeholder="(11) 9 0000-0000" autocomplete="tel" inputmode="tel" maxlength="15" required>
           </div>
           <small class="field-hint">Enviaremos a confirmação por este número.</small>
+        </div>
+
+        <div class="form-row">
+          <div class="field-heading">
+            <label>Escolha o barbeiro</label>
+            <span class="field-status">Obrigatório</span>
+          </div>
+          <div class="service-picker" id="barbeiroPicker" role="radiogroup" aria-label="Escolha o barbeiro">
+            <label class="service-option">
+              <input type="radio" name="barbeiro" value="1" checked>
+              <span><strong>Barbeiro Jhon Lennon</strong><small>Disponível</small></span>
+            </label>
+            <label class="service-option">
+              <input type="radio" name="barbeiro" value="2">
+              <span><strong>Barbeiro Tonni</strong><small>Disponível</small></span>
+            </label>
+          </div>
+          <small class="field-hint">A disponibilidade é calculada por barbeiro.</small>
         </div>
 
         <div class="form-row">
@@ -311,8 +329,8 @@
           <textarea id="obs" name="obs" rows="3" placeholder="Alguma preferência ou detalhe extra?"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">Enviar pelo WhatsApp</button>
-        <p class="form-note" id="formNote">Você será direcionado ao WhatsApp da AlvisiCuts com sua solicitação preenchida. Confirmação sujeita à disponibilidade.</p>
+        <button type="submit" class="btn btn-primary btn-block">Enviar seu agendamento</button>
+        <p class="form-note" id="formNote">Sua solicitação será enviada para o painel administrativo da BARBEARIA SARTORI. Confirmação sujeita à disponibilidade.</p>
       </form>
     </div>
   </section>
@@ -325,7 +343,7 @@
       <div>
         <div class="section-head">
           <p class="eyebrow">Onde estamos</p>
-        <h2 class="section-title">ENCONTRE A<br>BILL CUTS</h2>
+        <h2 class="section-title">ENCONTRE A<br>BARBEARIA SARTORI</h2>
         </div>
 
         <ul class="info-list">
@@ -339,7 +357,7 @@
           </li>
           <li>
             <strong>Instagram</strong>
-            <span><a href="https://www.instagram.com/bill.cuts_/" target="_blank" rel="noopener noreferrer">@bill.cuts_</a></span>
+            <span><a href="https://www.instagram.com/barbearia_sartori_/" target="_blank" rel="noopener noreferrer">@barbearia_sartori_</a></span>
           </li>
         </ul>
 
@@ -367,14 +385,14 @@
 <!-- ================= FOOTER ================= -->
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <a href="#home" class="logo logo--footer">BILL <span>CUTS</span></a>
+    <a href="#home" class="logo logo--footer">BARBEARIA <span>SARTORI</span></a>
     <nav class="footer-nav">
       <a href="#sobre">A Casa</a>
       <a href="#servicos">Serviços</a>
       <a href="#agendar">Agendar</a>
       <a href="#local">Localização</a>
     </nav>
-    <p class="footer-copy">© <span id="year"></span> Bill Cuts. Todos os direitos reservados.</p>
+    <p class="footer-copy">© <span id="year"></span> BARBEARIA SARTORI. Todos os direitos reservados.</p>
   </div>
 </footer>
 

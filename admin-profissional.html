@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Profissional | Bill Cuts</title>
+  <title>Painel Profissional | BARBEARIA SARTORI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -298,8 +298,8 @@
 <body>
   <header class="site-header" id="header">
     <div class="wrap header-inner">
-      <a href="index.html" class="brand" aria-label="Bill Cuts">
-        <img src="logo-billcuts.svg" alt="Bill Cuts" class="brand-logo" />
+      <a href="index.html" class="brand" aria-label="BARBEARIA SARTORI">
+        <img src="logo-billcuts.svg" alt="BARBEARIA SARTORI" class="brand-logo" />
       </a>
       <nav class="nav" id="nav">
         <a href="index.html#home" class="nav-link">Início</a>
@@ -318,12 +318,12 @@
     <div class="admin-header">
       <div class="admin-header-copy">
         <p class="admin-header-kicker">Sistema do proprietário</p>
-        <p class="admin-header-greeting">Bom trabalho, Bill</p>
-        <h1>João Victor de Oliveira Amancio</h1>
+        <p class="admin-header-greeting">Bom trabalho, Jhon Lennon</p>
+        <h1>Jhon Lennon</h1>
       </div>
 
       <div class="admin-header-actions">
-        <div class="user-pill">Bill • Proprietário</div>
+        <div class="user-pill">Jhon Lennon • Proprietário</div>
         <a href="index.html#agendar" class="btn btn-primary">Novo agendamento</a>
         <button type="button" class="btn btn-danger logout-btn" id="clearAppointmentsBtn">Zerar agenda</button>
         <button type="button" class="btn btn-ghost logout-btn" id="logoutBtn">Sair</button>
@@ -331,7 +331,7 @@
     </div>
 
     <div style="margin:0 0 24px; padding:18px 20px; border:1px solid var(--steel-line); background: linear-gradient(135deg, rgba(255, 113, 59, 0.08), rgba(255,255,255,0.02)); color: var(--paper-dim); font-size:15px; line-height:1.6; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);">
-      Gestão premium do Bill Cuts: acompanhe agendamentos, confirme horários e mantenha o atendimento do dia sempre impecável.
+      Gestão premium da BARBEARIA SARTORI: acompanhe agendamentos, confirme horários e mantenha o atendimento do dia sempre impecável.
     </div>
 
     <div class="admin-stats">
@@ -434,7 +434,7 @@
         <div class="slot status-${item.status}">
           <div class="slot-time">${item.hora}</div>
           <strong>${item.cliente_nome}</strong>
-          <small>${item.servico_nome}<br>${item.status}</small>
+          <small>${item.servico_nome}<br>${item.barbeiro_nome || `Barbeiro ${item.barbeiro_id || 1}`}<br>${item.status}</small>
         </div>
       `).join('');
     }
@@ -485,7 +485,7 @@
               <strong>${item.cliente_nome}</strong><br>
               <small>${item.cliente_telefone || 'Sem telefone'}</small>
             </td>
-            <td>${item.servico_nome}</td>
+            <td>${item.servico_nome}<br><small>${item.barbeiro_nome || `Barbeiro ${item.barbeiro_id || 1}`}</small></td>
             <td>${formatarData(item.data)}</td>
             <td>${item.hora}</td>
             <td><span class="status-pill status-${item.status}">${item.status}</span></td>

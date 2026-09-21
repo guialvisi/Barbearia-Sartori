@@ -1,4 +1,4 @@
-# Deploy do Bill Cuts
+# Deploy da BARBEARIA SARTORI
 
 ## Opção 1: Render (mais simples)
 

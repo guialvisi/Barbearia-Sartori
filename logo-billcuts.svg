@@ -12,8 +12,9 @@
   </g>
 
   <g transform="translate(170 0)">
-    <text x="0" y="96" font-family="Arial Black, Arial, sans-serif" font-size="62" font-weight="900" fill="#D9B067" letter-spacing="1">BILL CUTS</text>
-    <text x="4" y="132" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#D9B067" letter-spacing="6">BARBER SHOP</text>
+    <text x="0" y="88" font-family="Arial Black, Arial, sans-serif" font-size="42" font-weight="900" fill="#D9B067" letter-spacing="1">BARBEARIA</text>
+    <text x="0" y="132" font-family="Arial Black, Arial, sans-serif" font-size="42" font-weight="900" fill="#D9B067" letter-spacing="1">SARTORI</text>
+    <text x="4" y="165" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#D9B067" letter-spacing="5">BARBER SHOP</text>
     <path d="M4 150H366" stroke="#D9B067" stroke-width="3" stroke-linecap="round"/>
   </g>
 </svg>
